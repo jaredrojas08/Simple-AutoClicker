@@ -9,7 +9,7 @@ class ClickerUI:
         self.clicker = clicker
         self.root = tk.Tk()
         self.root.title("Simple AutoClicker")
-        self.root.geometry("320x180")
+        self.root.geometry("340x210")
         self.root.resizable(False, False)
 
         self.interval_var = tk.StringVar(value="100")
@@ -37,6 +37,15 @@ class ClickerUI:
             row=2, column=0, columnspan=2, padx=12, pady=6
         )
 
+        ttk.Separator(self.root, orient="horizontal").grid(
+            row=3, column=0, columnspan=2, sticky="ew", padx=12, pady=4
+        )
+        ttk.Label(
+            self.root,
+            text="Hotkeys:  F6 Start  ·  F7 Stop  ·  F8 Toggle",
+            foreground="#555",
+        ).grid(row=4, column=0, columnspan=2, padx=12, pady=4)
+
     def _parse_interval(self) -> int:
         try:
             value = int(self.interval_var.get())
@@ -54,9 +63,24 @@ class ClickerUI:
         self.clicker.stop()
         self.status_var.set("Status: Stopped")
 
+    def _on_toggle(self) -> None:
+        if self.clicker.running:
+            self._on_stop()
+        else:
+            self._on_start()
+
     def _on_close(self) -> None:
         self.clicker.stop()
         self.root.destroy()
+
+    def safe_start(self) -> None:
+        self.root.after(0, self._on_start)
+
+    def safe_stop(self) -> None:
+        self.root.after(0, self._on_stop)
+
+    def safe_toggle(self) -> None:
+        self.root.after(0, self._on_toggle)
 
     def run(self) -> None:
         self.root.mainloop()
