@@ -44,4 +44,4 @@ just run # launches the app
 
 ## Notes
 
-Might add future stuff like macros or maybe make UI prettier
+Will add executable soon
